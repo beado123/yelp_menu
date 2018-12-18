@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Movie++</title>
+	<link href="./static/style.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<!------ Include the above in your HEAD tag ---------->
+
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
+	</head>
+
+	<div>
+		<p style="font-size: 30px; text-align: center">Welcome to CS510 Project!</p>
+	<div>
+	
+	<div class="col" id="head" style="text-align:center;margin:auto;padding:20px;background-color:#f0ead6;width: 500px">
+		<form method="POST" >
+			Select and search your restaurant!<br>
+			<input  name="restaurant" size="35">
+		    <input type="submit" value="search" id="submitForm">
+			<script>
+				$('#submitForm').click(function(){
+					console.log("submit form")
+					$('#outer').css("display", 'none');
+					$('#load').css("display", 'inline');
+				})
+			</script>
+		</form>
+		<script>
+			var arr = ["alinea-chicago","cafe-ba-ba-reeba-chicago-3","girl-and-the-goat-chicago","kumas-corner-belmont-chicago","little-goat-diner-chicago-4","lou-malnatis-pizzeria-chicago","portillos-hot-dogs-chicago-4","quartino-ristorante-chicago","smoque-bbq-chicago","the-purple-pig-chicago","wildberry-pancakes-and-cafe-chicago-2"];
+			arr.forEach(function(res, index){
+				$('#head').append(
+					'<div style="color:#971849;">' + res + '</div>'	
+				)
+			})
+		</script>
+        </div>
+
+	<div id="outer" style="padding:20px;">
+		<script>
+			function myFunc(vars) {
+	    			return vars
+			}
+			var dic =  myFunc({{dic|tojson}});
+			var arr = [];
+			var reviews = dic["reviews"];
+			reviews.forEach(function(review, index){
+				if(review["review"].pics !== null){
+					var obj = {
+						des: review["review"].des,
+						pic: review["review"].pics
+					}
+					arr.push(obj)
+				}
+			})
+			arr.forEach(function(item, index){
+				console.log(item.pic);
+			})
+			arr.forEach(function (review, indexOuter) {
+				$('#outer').append(
+					'<div id="inner" style="margin-top: 20px; padding: 20px; background-color:#f0ead6;" >'+
+						'<div><p style="font-size:20px">Review: </p>'+ review.des + '</div>' +
+					'</div>'
+				)
+				$('#outer').append('<div id="pic' + indexOuter + '" style="display:flex;flex-direction:row;border-top:3px dotted #3c7c5c;justify-content:center">');
+				review.pic.forEach(function(picItem, index){
+					$('#pic' + indexOuter).prepend(
+						'<div style="margin-top:-0px;padding: 20px;background-color:#f0ead6;min-width: 415px;" >'+
+							'<div><p style="font-size:20px">Photo'+(review.pic.length - index) + '</p><a href="https://www.yelp.com/menu/{{restaurant}}/item"><img src="' + picItem.url + '" style="width:300px;height:300px"></div>' +
+							'<div>'+ picItem.caption + '</div>' +
+						'</div>'
+					)
+				})
+			})
+		</script>
+	</div>
+</html>

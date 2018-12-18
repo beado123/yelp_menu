@@ -1,0 +1,50 @@
+import gensim
+
+def processPhrase(w, stop_words):
+    wlist = gensim.utils.simple_preprocess(w)
+    wlistWOstopwords = [w for w in wlist if not w in stop_words]
+    return wlistWOstopwords
+
+def getSimilarity1(model, stop_words, target_phrase, caption):
+    try:
+        target_phrase_list = processPhrase(target_phrase, stop_words)
+        caption_list = processPhrase(caption, stop_words)
+        score = 0.0
+        for token in target_phrase_list:
+            sim_list = [model.similarity(token, t) for t in caption_list]
+            max_sim = max(sim_list)
+            score += max_sim
+        return score/len(target_phrase_list)
+    except:
+        return 0.0
+
+def getSimilarity2(model, stop_words, target_phrase, caption):
+    try:
+        target_phrase_list = processPhrase(target_phrase, stop_words)
+        caption_list = processPhrase(caption, stop_words)
+        score = 0.0
+        for token in target_phrase_list:
+            sim_list = [model.similarity(token, t) for t in caption_list]
+            sub_score = sum(sim_list) / len(sim_list)
+            score += sub_score
+        return score/len(target_phrase_list)
+    except:
+        return 0.0
+
+def getSimilarity3(model, stop_words, target_phrase, caption):
+    try:
+        target_phrase_list = processPhrase(target_phrase, stop_words)
+        caption_list = processPhrase(caption, stop_words)
+        score = 0.0
+        for token in target_phrase_list:
+            sim_list = [model.similarity(token, t) for t in caption_list]
+            max_sim = max(sim_list)
+            if len(sim_list) > 1:    
+                sim_list.remove(max_sim)
+                max_sim2 = max(sim_list)
+                score += ( max_sim + max_sim2 ) / 2.0
+            else:
+                score += max_sim
+        return score/len(target_phrase_list)
+    except:
+        return 0.0
