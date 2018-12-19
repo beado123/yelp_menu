@@ -123,16 +123,20 @@ def main(bName, max_score=False, top_three=False):
         if score >= 0.6:
             if max_score:
                 if topDish not in rs_dict.keys():
-                    rs_dict[topDish] = [caption, score, getPic(pics, caption)]
+                    rs_dict[topDish] = [caption, getPic(pics, caption)]
                 else:
                     if score >= rs_dict[topDish][1]:
-                        rs_dict[topDish] = [caption, score, getPic(pics, caption)]
+                        rs_dict[topDish] = [caption, getPic(pics, caption)]
             elif top_three:
                 if topDish not in rs_dict.keys():
-                    rs_dict[topDish] = [caption, score, getPic(pics, caption)]
+                    rs_dict[topDish] = [caption, getPic(pics, caption)]
                 else:
-                    if len(rs_dict[topDish]) < 9:
-                        rs_dict[topDish] += [caption, score, getPic(pics, caption)]
+                    pic_ = getPic(pics, caption)
+                    if len(rs_dict[topDish]) < 4 and pic_ != rs_dict[topDish][1]:
+                        rs_dict[topDish] += [caption, pic_]
+                    elif len(rs_dict[topDish]) >= 4 and len(rs_dict[topDish]) < 6:
+                        if pic_ != rs_dict[topDish][3] and pic_ != rs_dict[topDish][1]:
+                            rs_dict[topDish] += [caption, pic_]
             else:
                 if topDish not in rs_dict.keys():
                     rs_dict[topDish] = ['--'+caption+' >>> '+str(score)+' >>> '+getPic(pics, caption)]
@@ -152,7 +156,7 @@ def main(bName, max_score=False, top_three=False):
 
 
 if __name__ == '__main__':
-    main('cafe-ba-ba-reeba-chicago-3', top_three=True)
+    main('little-goat-diner-chicago-4', top_three=True)
 
 
 
