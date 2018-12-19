@@ -30,6 +30,7 @@
 		<form method="POST" >
 			Select and search your restaurant!<br>
 			Current location: {{app}}<br>
+			In our application1, you can enter a restaurant name from the below list or simply click the restaurants below and it will return you the whole menu of the restaurant and its most relevant matching photos with captions from customer reviews<br>
 			<input  name="restaurant" size="35">
 		    <input type="submit" value="search" id="submitForm">
 			<script>
@@ -66,22 +67,31 @@
 			//var dict = '{{dic}}';
 			console.log(dic);
 			for(var key in dic){
-				//console.log(dic[key])
 				var value = dic[key];
-				//var components = first.split(">>>");
+				var size = value[2].substr(-8, 3);
+				var url2 = "";
+				var url3 = "";
+				if(value.length >= 4)url2 = value[3].replace(size, "348");
+				if(value.length >= 5)url3 = value[4].replace(size, "348");
+				//console.log(value[2]);
+				//console.log(value[2].replace(size, "348"));
 				var obj = {
 					menu: key,
 					caption: value[0],
-					url: value[2]
+					url1: value[2].replace(size, "348"),
+					url2: url2,
+					url3: url3
 				}
 				arr.push(obj)
 			}
 			arr.forEach(function (item, index) {
 				$('#outer').append(
-					'<div style="margin: 20px; padding: 20px; background-color:#f0ead6; display: flex; flex-direction: row;" >'+
-						'<div style="width: 400px"><p style="font-size:20px">Menu: </p>'+   item.menu  + '</div>' +
-						'<div style="width: 500px"><p style="font-size:20px">Image Caption: </p>' + item.caption + '</div>' +
-						'<div style="float:right"><p style="font-size:20px">Image: </p><img  src="' + item.url + '"></div>' +
+					'<div style="margin: 20px; padding: 20px; background-color:#f0ead6; display: flex; flex-direction: row;flex-wrap:wrap" >'+
+						'<div style="width: 600px"><p style="font-size:20px">Menu: </p>'+   item.menu  + '</div>' +
+						'<div style="width: 600px"><p style="font-size:20px">Image Caption: </p>' + item.caption + '</div><br>' +
+						'<div style="float:right"><p style="font-size:20px">Image: </p><img  src="' + item.url1 + '"></div>' +
+						'<div style="float:right"><img  src="' + item.url2 + '"></div>' +
+						'<div style="float:right"><img  src="' + item.url3 + '"></div>' +
 					'</div>'
 				)
 			})
