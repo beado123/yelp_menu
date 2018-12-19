@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Movie++</title>
+	<title>use case1 </title>
 	<link href="./static/style.css" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -20,13 +20,13 @@
 	<div style="text-align:center">
 		<p style="font-size: 30px">Welcome to CS510 Project!</p>
 	<div>
-
+	
 	<div style="display:flex;flex-direction:row;justify-content:center;">
 		<div style="margin-right: 10px"><button type="button" onclick="window.location.href='{{url_for( 'app1' )}}';">app1</button></div>
 		<div style="margin-left: 10px"><button type="button" onclick="window.location.href='{{url_for( 'app2')}}';">app2</button></div>
 	</div>
 	
-	<div class="col" id="head" style="margin: auto; padding: 20px; background-color:#f0ead6; width:500px;margin-top:10px">
+	<div class="col" id="head" style="margin: auto; padding: 20px; background-color:#f0ead6; width: 500px">
 		<form method="POST" >
 			Select and search your restaurant!<br>
 			<input  name="restaurant" size="35">
@@ -43,13 +43,14 @@
 			var arr = ["alinea-chicago","cafe-ba-ba-reeba-chicago-3","girl-and-the-goat-chicago","kumas-corner-belmont-chicago","little-goat-diner-chicago-4","lou-malnatis-pizzeria-chicago","portillos-hot-dogs-chicago-4","quartino-ristorante-chicago","smoque-bbq-chicago","the-purple-pig-chicago","wildberry-pancakes-and-cafe-chicago-2"];
 			arr.forEach(function(res, index){
 				$('#head').append(
-					'<div style="color:#971849;">' + res + '</div>'	
+					'<div style="color:#971849; ">' + '<a href="/app1/?bname='+res+' ">' + res + '</a></div>'
 				)
 			})
 		</script>
         </div>
 	<div id="load" style="display:{{displayLoad}}; border-top: 100px; font-size:30px; color:#971849">Algorithm is running...</div>
 	<div id = "outer" style="display:{{displayRes}}">
+		<h2>{{num}} items found.</h2>
 		<script>
 			function myFunc(vars) {
 	    			return vars

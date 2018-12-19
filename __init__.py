@@ -19,10 +19,8 @@ def convert_keys_to_string(dictionary):
     return dict((str(k), convert_keys_to_string(v)) 
         for k, v in dictionary.items())
 
-app.route('/app1', methods = ["GET", "POST"])
 @app.route('/', methods = ["GET", "POST"])
-def app1():
-	print("app1")
+def app2():
 	data = {}
 	bname = ""
 	if request.method == "POST":
@@ -37,32 +35,44 @@ def app1():
 	
 	return render_template("index1.html", dic=data, restaurant=bname)
 
-@app.route('/app2', methods = ["GET", "POST"])
-def app2():
-	print("app2")
+@app.route('/app1/', methods = ["GET", "POST"])
+def app1():
 	dic = {}
+	get_bname = request.args.get("bname")
 	if request.method == "POST":
 		print("Searching......")
 		bname = request.form['restaurant']
 		print("bname", bname)
 		dic = compute.main(bname, True)
-		print(dic)
-		return render_template("index.html", dic=(dic), displayLoad="none", displayRes="block")
+		print(len(dic.keys()))
+		num_items = len(dic.keys())
+		return render_template("index.html", dic=(dic), num=num_items, displayLoad="none", displayRes="block")
+	elif get_bname != None:
+		print("Searching......")
+		bname = get_bname
+		print("bname", bname)
+		dic = compute.main(bname, True)
+		print(len(dic.keys()))
+		num_items = len(dic.keys())
+		return render_template("index.html", dic=(dic), num=num_items, displayLoad="none", displayRes="block")
 	
 	return render_template("index.html", dic=(dic), displayLoad="none", displayRes="none")
 
 @app.route('/redirecter/', methods = ["GET", "POST"])
 def redirecter():
 	dic = {}
-	
 	if request.method == "GET":
 		bname = request.args.get("bname")
 		caption = request.args.get("caption")
-		item = compute.getItem(bname, caption).lower()
-		item = item.replace(" ", "-")
-		url = 'https://www.yelp.com/menu/' + bname + '/item/' + item
-		print(url)
-		return redirect(url, code=303)
+		item, score = compute.getItem(bname, caption)
+		print(score)
+		if score < 0.4:
+			url = 'https://www.yelp.com/menu/' + bname
+			return redirect(url, code=303)
+		else:
+			url = 'https://www.yelp.com/menu/' + bname + '/item/' + item
+			print(url)
+			return redirect(url, code=303)
 	
 	return render_template("index.html", dic=(dic), displayLoad="none", displayRes="none")
 

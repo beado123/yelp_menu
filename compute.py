@@ -45,6 +45,13 @@ def openPicCaption(bname):
     captions = [p[1] for p in pics]
     return pics, captions
 
+def toUrl(item):
+    item = item.lower()
+    item = item.replace(" ", "-")
+    item = item.replace("&", "and")
+    return item
+
+
 # helper functions
 def getPic(picList, caption):
     for p in picList:
@@ -79,7 +86,7 @@ def getItem(bName, caption):
             score = cur_score
             topDish = subject
 
-    return topDish
+    return toUrl(topDish), score
 
 # main function
 def main(bName, max_score=False):
