@@ -68,13 +68,11 @@
 			console.log(dic);
 			for(var key in dic){
 				var value = dic[key];
-				var size = value[1].substr(-8, 3);
+				var size = "168";
 				var url2 = "";
 				var url3 = "";
 				if(value.length >= 4)url2 = value[3].replace(size, "348");
 				if(value.length >= 6)url3 = value[5].replace(size, "348");
-				//console.log(value[2]);
-				//console.log(value[2].replace(size, "348"));
 				var obj = {
 					menu: key,
 					caption: value[0],
