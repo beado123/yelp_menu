@@ -26,14 +26,20 @@
 		<div style="margin-left: 10px"><button type="button" onclick="window.location.href='{{url_for( 'app2')}}';">app2</button></div>
 	</div>
 	
-	<div class="col" id="head" style="margin: auto; padding: 20px; background-color:#f0ead6; width: 500px">
+	<div class="col" id="head" style="margin: auto; padding: 20px; background-color:#f0ead6; width:500px;margin-top:10px">
 		<form method="POST" >
 			Select and search your restaurant!<br>
+			Current location: {{app}}<br>
 			<input  name="restaurant" size="35">
 		    <input type="submit" value="search" id="submitForm">
 			<script>
 				$('#submitForm').click(function(){
 					console.log("submit form")
+					$('#outer').css("display", 'none');
+					$('#load').css("display", 'inline');
+				})
+				$('#head').click(function(){
+					console.log("on click restaurant item")
 					$('#outer').css("display", 'none');
 					$('#load').css("display", 'inline');
 				})
@@ -43,7 +49,7 @@
 			var arr = ["alinea-chicago","cafe-ba-ba-reeba-chicago-3","girl-and-the-goat-chicago","kumas-corner-belmont-chicago","little-goat-diner-chicago-4","lou-malnatis-pizzeria-chicago","portillos-hot-dogs-chicago-4","quartino-ristorante-chicago","smoque-bbq-chicago","the-purple-pig-chicago","wildberry-pancakes-and-cafe-chicago-2"];
 			arr.forEach(function(res, index){
 				$('#head').append(
-					'<div style="color:#971849; ">' + '<a href="/app1/?bname='+res+' ">' + res + '</a></div>'
+					'<div id="restaurant-item" style="color:#971849; ">' + '<a href="/app1/?bname='+res+' ">' + res + '</a></div>'
 				)
 			})
 		</script>
