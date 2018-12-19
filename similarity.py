@@ -5,6 +5,41 @@ def processPhrase(w, stop_words):
     wlistWOstopwords = [w for w in wlist if not w in stop_words]
     return wlistWOstopwords
 
+def misspellCheck(w1, w2):
+    wl1 = list(w1)
+    wl2 = list(w2)
+    misspell = 0
+    for c in wl1:
+        if not c in wl2:
+            misspell+=1
+        else:
+            wl2.remove(c)
+        if misspell > 2:
+            return False
+    return True
+
+def naiveMatch(target, w):
+    if target == w:
+        return 1.0
+    else:
+        if abs(len(target)-len(w)) <= 2:
+            if misspellCheck(target, w):
+                return 0.5
+    return 0.0
+
+def naiveSimilarity(model, stop_words, target_phrase, caption):
+    try:
+        target_phrase_list = processPhrase(target_phrase, stop_words)
+        caption_list = processPhrase(caption, stop_words)
+        score = 0.0
+        for token in target_phrase_list:
+            sim_list = [naiveMatch(token, t) for t in caption_list]
+            max_sim = max(sim_list)
+            score += max_sim
+        return score/len(target_phrase_list)
+    except:
+        return 0.0
+
 def getSimilarity1(model, stop_words, target_phrase, caption):
     try:
         target_phrase_list = processPhrase(target_phrase, stop_words)

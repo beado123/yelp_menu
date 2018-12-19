@@ -4,17 +4,17 @@ from nltk.corpus import stopwords
 from similarity import *
 
 # parameters
-weightOfSubject = 0.6
-similarityFunction = getSimilarity3
+weightOfSubject = 0.8
+similarityFunction = getSimilarity1
+modelname = "mixed.model" # yelp_cbow11.model
 
 # data paths
 data_path = 'data/'
 
 stop_words = set(stopwords.words('english'))
-data_path = 'data/'
 
 # load model
-fname = 'yelp_cbow11.model'
+fname = modelname
 model = gensim.models.Word2Vec.load(fname)
 
 # open file
@@ -64,10 +64,20 @@ def calculateScoreLinearInterpolation(subScore, detScore):
 
 def setWeiget(menu):
     global weightOfSubject
+
     detail = TextBlob(menu[0][1])
-    if not detail.detect_language() == "en":
-        print("detail dropped.")
-        weightOfSubject = 1.0
+    for d in menu:
+        try:
+            detail = TextBlob(d[1])         
+            if not detail.detect_language() == "en":
+                print("detail dropped.")
+                weightOfSubject = 1.0
+                break
+            else:
+                break
+        except:
+            continue
+
 
 def getItem(bName, caption):
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~main: ", bName)
@@ -89,10 +99,11 @@ def getItem(bName, caption):
     return toUrl(topDish), score
 
 # main function
-def main(bName, max_score=False):
+def main(bName, max_score=False, top_three=False):
     # open menu & captions
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~main: ", bName)
     menu = openMenu(bName)
+    setWeiget(menu)
     pics, captions = openPicCaption(bName)
 
     rs_dict = {}
@@ -102,31 +113,36 @@ def main(bName, max_score=False):
         for dish in menu:
             subject = dish[0]
             detail = dish[1]
-            target = subject + ' ' + detail
+            target = subject + ', ' + detail
             cur_score_subject = similarityFunction(model, stop_words, subject, caption)
             cur_score_detail = similarityFunction(model, stop_words, detail, caption)
             cur_score = calculateScoreLinearInterpolation(cur_score_subject, cur_score_detail)
             if cur_score >= score:
                 score = cur_score
                 topDish = target
-        if score >= 0.4:
-            if not max_score:
-                if topDish not in rs_dict.keys():
-                    rs_dict[topDish] = ['--'+caption+' >>> '+str(score)+' >>> '+getPic(pics, caption)]
-                else:
-                    rs_dict[topDish].append('--'+caption+' >>> '+str(score)+' >>> '+getPic(pics, caption))
-            else:
+        if score >= 0.6:
+            if max_score:
                 if topDish not in rs_dict.keys():
                     rs_dict[topDish] = [caption, score, getPic(pics, caption)]
                 else:
                     if score >= rs_dict[topDish][1]:
                         rs_dict[topDish] = [caption, score, getPic(pics, caption)]
-
+            elif top_three:
+                if topDish not in rs_dict.keys():
+                    rs_dict[topDish] = [caption, score, getPic(pics, caption)]
+                else:
+                    if len(rs_dict[topDish]) < 9:
+                        rs_dict[topDish] += [caption, score, getPic(pics, caption)]
+            else:
+                if topDish not in rs_dict.keys():
+                    rs_dict[topDish] = ['--'+caption+' >>> '+str(score)+' >>> '+getPic(pics, caption)]
+                else:
+                    rs_dict[topDish].append('--'+caption+' >>> '+str(score)+' >>> '+getPic(pics, caption))
     for r in rs_dict.items():
         if not max_score:
             print('===>', r[0])
             for l in r[1]:
-                print("    "+l)
+                print(l)
             print()
         else:
             print('===>', r[0])
@@ -136,7 +152,7 @@ def main(bName, max_score=False):
 
 
 if __name__ == '__main__':
-    main()
+    main('cafe-ba-ba-reeba-chicago-3', top_three=True)
 
 
 
