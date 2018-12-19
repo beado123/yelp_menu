@@ -39,6 +39,11 @@
 					$('#outer').css("display", 'none');
 					$('#load').css("display", 'inline');
 				})
+				$('#head').click(function(){
+					console.log("click restaurant item")
+					$('#outer').css("display", 'none');
+					$('#load').css("display", 'inline');
+				})
 			</script>
 		</form>
 		<script>
@@ -63,17 +68,17 @@
 			console.log(dic);
 			for(var key in dic){
 				var value = dic[key];
-				var size = value[2].substr(-8, 3);
+				var size = value[1].substr(-8, 3);
 				var url2 = "";
 				var url3 = "";
 				if(value.length >= 4)url2 = value[3].replace(size, "348");
-				if(value.length >= 5)url3 = value[4].replace(size, "348");
+				if(value.length >= 6)url3 = value[5].replace(size, "348");
 				//console.log(value[2]);
 				//console.log(value[2].replace(size, "348"));
 				var obj = {
 					menu: key,
 					caption: value[0],
-					url1: value[2].replace(size, "348"),
+					url1: value[1].replace(size, "348"),
 					url2: url2,
 					url3: url3
 				}
@@ -81,12 +86,12 @@
 			}
 			arr.forEach(function (item, index) {
 				$('#outer').append(
-					'<div style="margin: 20px; padding: 20px; background-color:#f0ead6; display: flex; flex-direction: row;flex-wrap:wrap" >'+
+					'<div style="margin: 20px; padding: 20px; background-color:#f0ead6; display: flex; flex-direction: row;flex-wrap:wrap;" >'+
 						'<div style="width: 600px"><p style="font-size:20px">Menu: </p>'+   item.menu  + '</div>' +
 						'<div style="width: 600px"><p style="font-size:20px">Image Caption: </p>' + item.caption + '</div><br>' +
-						'<div style="float:right"><p style="font-size:20px">Image: </p><img  src="' + item.url1 + '"></div>' +
-						'<div style="float:right"><img  src="' + item.url2 + '"></div>' +
-						'<div style="float:right"><img  src="' + item.url3 + '"></div>' +
+						'<div style="margin-right:50px;margin-top:20px;"><img  src="' + item.url1 + '"></div>' +
+						'<div style="margin-right:50px;margin-top:20px;"><img  src="' + item.url2 + '"></div>' +
+						'<div style="margin-top:20px;"><img  src="' + item.url3 + '"></div>' +
 					'</div>'
 				)
 			})

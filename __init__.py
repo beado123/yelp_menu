@@ -43,7 +43,7 @@ def app1():
 		print("Searching......")
 		bname = request.form['restaurant']
 		print("bname", bname)
-		dic = compute.main(bname, True)
+		dic = compute.main(bname, top_three=True)
 		print(len(dic.keys()))
 		num_items = len(dic.keys())
 		return render_template("index.html", dic=(dic), num=num_items, displayLoad="none", displayRes="block")
@@ -51,7 +51,7 @@ def app1():
 		print("Searching......")
 		bname = get_bname
 		print("bname", bname)
-		dic = compute.main(bname, True)
+		dic = compute.main(bname, top_three=True)
 		print(len(dic.keys()))
 		num_items = len(dic.keys())
 		return render_template("index.html", dic=(dic), num=num_items, displayLoad="none", displayRes="block")
