@@ -66,7 +66,7 @@ def redirecter():
 		caption = request.args.get("caption")
 		item, score = compute.getItem(bname, caption)
 		print(score)
-		if score < 0.4:
+		if score < 0.6:
 			url = 'https://www.yelp.com/menu/' + bname
 			return redirect(url, code=303)
 		else:
