@@ -1,4 +1,5 @@
 import gensim
+from textblob import TextBlob
 from nltk.corpus import stopwords
 from similarity import *
 
@@ -53,6 +54,32 @@ def getPic(picList, caption):
 
 def calculateScoreLinearInterpolation(subScore, detScore):
     return subScore*weightOfSubject + (1-weightOfSubject)*detScore
+
+def setWeiget(menu):
+    global weightOfSubject
+    detail = TextBlob(menu[0][1])
+    if not detail.detect_language() == "en":
+        print("detail dropped.")
+        weightOfSubject = 1.0
+
+def getItem(bName, caption):
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~main: ", bName)
+    menu = openMenu(bName)
+    setWeiget(menu)
+
+    score = 0.0
+    topDish = ''
+    for dish in menu:
+        subject = dish[0]
+        detail = dish[1]
+        cur_score_subject = similarityFunction(model, stop_words, subject, caption)
+        cur_score_detail = similarityFunction(model, stop_words, detail, caption)
+        cur_score = calculateScoreLinearInterpolation(cur_score_subject, cur_score_detail)
+        if cur_score >= score:
+            score = cur_score
+            topDish = subject
+
+    return topDish
 
 # main function
 def main(bName, max_score=False):

@@ -1,4 +1,4 @@
-from flask import Flask, request, session, render_template, flash
+from flask import Flask, request, session, render_template, flash, redirect
 import os.path
 from pathlib import Path
 from flask import jsonify, redirect, url_for
@@ -49,6 +49,20 @@ def app1():
 	
 	return render_template("index.html", dic=(dic), displayLoad="none", displayRes="none")
 
+@app.route('/redirecter/', methods = ["GET", "POST"])
+def redirecter():
+	dic = {}
+	
+	if request.method == "GET":
+		bname = request.args.get("bname")
+		caption = request.args.get("caption")
+		item = compute.getItem(bname, caption).lower()
+		item = item.replace(" ", "-")
+		url = 'https://www.yelp.com/menu/' + bname + '/item/' + item
+		print(url)
+		return redirect(url, code=303)
+	
+	return render_template("index.html", dic=(dic), displayLoad="none", displayRes="none")
 
 if __name__ == "__main__":
 	app.run()
