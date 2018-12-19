@@ -21,7 +21,12 @@
 		<p style="font-size: 30px; text-align: center">Welcome to CS510 Project!</p>
 	<div>
 	
-	<div class="col" id="head" style="text-align:center;margin:auto;padding:20px;background-color:#f0ead6;width: 500px">
+	<div style="display:flex;flex-direction:row;justify-content:center;">
+		<div style="margin-right: 10px"><button type="button" onclick="window.location.href='{{url_for( 'app1' )}}';">app1</button></div>
+		<div style="margin-left: 10px"><button type="button" onclick="window.location.href='{{url_for( 'app2')}}';">app2</button></div>
+	</div>
+	
+	<div class="col" id="head" style="text-align:center;margin:auto;padding:20px;background-color:#f0ead6;width:500px;margin-top:10px">
 		<form method="POST" >
 			Select and search your restaurant!<br>
 			<input  name="restaurant" size="35">

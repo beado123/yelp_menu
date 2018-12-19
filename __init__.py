@@ -19,8 +19,10 @@ def convert_keys_to_string(dictionary):
     return dict((str(k), convert_keys_to_string(v)) 
         for k, v in dictionary.items())
 
+app.route('/app1', methods = ["GET", "POST"])
 @app.route('/', methods = ["GET", "POST"])
-def app2():
+def app1():
+	print("app1")
 	data = {}
 	bname = ""
 	if request.method == "POST":
@@ -35,10 +37,10 @@ def app2():
 	
 	return render_template("index1.html", dic=data, restaurant=bname)
 
-@app.route('/app1', methods = ["GET", "POST"])
-def app1():
+@app.route('/app2', methods = ["GET", "POST"])
+def app2():
+	print("app2")
 	dic = {}
-	
 	if request.method == "POST":
 		print("Searching......")
 		bname = request.form['restaurant']
