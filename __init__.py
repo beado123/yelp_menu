@@ -18,10 +18,13 @@ def convert_keys_to_string(dictionary):
     return dict((str(k), convert_keys_to_string(v)) 
         for k, v in dictionary.items())
 
+@app.route('/app2/', methods = ["GET", "POST"])
 @app.route('/', methods = ["GET", "POST"])
 def app2():
+	print("In app2")
 	data = {}
 	bname = ""
+	get_bname = request.args.get("bname")
 	if request.method == "POST":
 		bname = request.form['restaurant']
 		print("bname", bname)
@@ -29,12 +32,22 @@ def app2():
 		with open('./reviews/' + fileName) as f:
 			data = json.load(f)
 	
-		return render_template("index1.html", dic=data, restaurant=bname)
+		return render_template("index1.html", dic=data, restaurant=bname, app="app2")
+	elif get_bname != None:
+		print("Searching......")
+		bname = get_bname
+		print("bname", bname)
+		fileName = bname + ".json"
+		with open('./reviews/' + fileName) as f:
+			data = json.load(f)
+		return render_template("index1.html", dic=data, restaurant=bname, app="app2")
 	
-	return render_template("index1.html", dic=data, restaurant=bname)
+	return render_template("index1.html", dic=data, restaurant=bname, app="app2")
 
 @app.route('/app1/', methods = ["GET", "POST"])
 def app1():
+	print("In app1")
+	bname = ""
 	dic = {}
 	get_bname = request.args.get("bname")
 	if request.method == "POST":
@@ -44,7 +57,7 @@ def app1():
 		dic = compute.main(bname, top_three=True)
 		print(len(dic.keys()))
 		num_items = len(dic.keys())
-		return render_template("index.html", dic=(dic), num=num_items, displayLoad="none", displayRes="block")
+		return render_template("index.html", restaurant=bname, dic=(dic), num=num_items, displayLoad="none", displayRes="block", app="app1")
 	elif get_bname != None:
 		print("Searching......")
 		bname = get_bname
@@ -52,9 +65,9 @@ def app1():
 		dic = compute.main(bname, top_three=True)
 		print(len(dic.keys()))
 		num_items = len(dic.keys())
-		return render_template("index.html", dic=(dic), num=num_items, displayLoad="none", displayRes="block")
+		return render_template("index.html", restaurant=bname, dic=(dic), num=num_items, displayLoad="none", displayRes="block", app="app1")
 	
-	return render_template("index.html", dic=(dic), displayLoad="none", displayRes="none")
+	return render_template("index.html", restaurant=bname, dic=(dic), displayLoad="none", displayRes="none", app="app1")
 
 @app.route('/redirecter/', methods = ["GET", "POST"])
 def redirecter():
@@ -72,7 +85,7 @@ def redirecter():
 			print(url)
 			return redirect(url, code=303)
 	
-	return render_template("index.html", dic=(dic), displayLoad="none", displayRes="none")
+	return render_template("index.html", dic=(dic), displayLoad="none", displayRes="none", app="app1")
 
 if __name__ == "__main__":
 	app.run()
