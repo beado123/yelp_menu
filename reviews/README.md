@@ -1,0 +1,1 @@
+## This folder has files of customer reviews of a restaurant. The file is JSON. Key is restaurant name. Value is array of reviews where each element is also a dictionary that has values for description, image url and caption.
