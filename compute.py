@@ -156,7 +156,8 @@ def main(bName, max_score=False, top_three=False):
 
 
 if __name__ == '__main__':
-    main('little-goat-diner-chicago-4', top_three=True)
+    print(getItem('little-goat-diner-chicago-4', "Confit Goat Belly"))
+    #main('little-goat-diner-chicago-4', top_three=True)
 
 
 

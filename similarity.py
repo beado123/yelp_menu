@@ -1,10 +1,18 @@
 import gensim
 from difflib import SequenceMatcher
 
+alpha = 3
+
 def processPhrase(w, stop_words):
     wlist = gensim.utils.simple_preprocess(w)
     wlistWOstopwords = [w for w in wlist if not w in stop_words]
     return wlistWOstopwords
+
+def calcNorm(norm):
+    norm_ = norm
+    if norm_ >= alpha:
+        norm_ = alpha + (alpha/10.0) * (norm_-alpha)
+    return norm_
 
 def misspellCheck(w1, w2):
     ratio = SequenceMatcher(None, w1, w2).ratio()
@@ -28,7 +36,9 @@ def naiveSimilarity(model, stop_words, target_phrase, caption):
             sim_list = [naiveMatch(token, t) for t in caption_list]
             max_sim = max(sim_list)
             score += max_sim
-        return score/len(target_phrase_list)
+        norm = len(target_phrase_list)
+        norm = calcNorm(norm)
+        return score / norm
     except:
         return 0.0
 
@@ -38,10 +48,16 @@ def getSimilarity1(model, stop_words, target_phrase, caption):
         caption_list = processPhrase(caption, stop_words)
         score = 0.0
         for token in target_phrase_list:
-            sim_list = [model.similarity(token, t) for t in caption_list]
+            try:
+                sim_list = [model.similarity(token, t) for t in caption_list]
+            except KeyError:
+                sim_list = [naiveMatch(token, t) for t in caption_list]
             max_sim = max(sim_list)
             score += max_sim
-        return score/len(target_phrase_list)
+
+        norm = len(target_phrase_list)
+        norm = calcNorm(norm)
+        return score / norm
     except:
         return 0.0
 
@@ -51,7 +67,10 @@ def getSimilarity2(model, stop_words, target_phrase, caption):
         caption_list = processPhrase(caption, stop_words)
         score = 0.0
         for token in target_phrase_list:
-            sim_list = [model.similarity(token, t) for t in caption_list]
+            try:
+                sim_list = [model.similarity(token, t) for t in caption_list]
+            except KeyError:
+                sim_list = [model.similarity(token, t) for t in caption_list]
             sub_score = sum(sim_list) / len(sim_list)
             score += sub_score
         return score/len(target_phrase_list)
