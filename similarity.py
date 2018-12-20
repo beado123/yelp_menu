@@ -1,4 +1,5 @@
 import gensim
+from difflib import SequenceMatcher
 
 def processPhrase(w, stop_words):
     wlist = gensim.utils.simple_preprocess(w)
@@ -6,17 +7,8 @@ def processPhrase(w, stop_words):
     return wlistWOstopwords
 
 def misspellCheck(w1, w2):
-    wl1 = list(w1)
-    wl2 = list(w2)
-    misspell = 0
-    for c in wl1:
-        if not c in wl2:
-            misspell+=1
-        else:
-            wl2.remove(c)
-        if misspell > 2:
-            return False
-    return True
+    ratio = SequenceMatcher(None, w1, w2).ratio()
+    return ratio >= 0.8
 
 def naiveMatch(target, w):
     if target == w:
