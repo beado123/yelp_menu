@@ -1,0 +1,1 @@
+# This folder has files for 10 restaurants. Each restaurant has 2 types of file. One file has all menu items of the restaurant. One file has customer reviews of the restaurant which includes image url and captions.

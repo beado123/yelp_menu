@@ -1,3 +1,4 @@
+#This is the file that contains back-end code of project. It runs the algorithm from compute.py and sends data to html, renders template to html in front-end
 from flask import Flask, request, session, render_template, flash, redirect
 import os.path
 from pathlib import Path
@@ -6,8 +7,6 @@ from wtforms import Form, BooleanField, TextField, PasswordField, validators
 from datetime import datetime
 import compute 
 import json
-#from pprint import pprint
-
 
 app = Flask(__name__)
 app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
@@ -30,7 +29,6 @@ def app2():
 		with open('./reviews/' + fileName) as f:
 			data = json.load(f)
 	
-		#reviews = data["reviews"]
 		return render_template("index1.html", dic=data, restaurant=bname)
 	
 	return render_template("index1.html", dic=data, restaurant=bname)
