@@ -4,7 +4,7 @@ from nltk.corpus import stopwords
 from similarity import *
 
 # parameters
-weightOfSubject = 0.8
+weightOfSubject = 0.9
 similarityFunction = getSimilarity1
 modelname = "mixed.model" # yelp_cbow11.model
 
